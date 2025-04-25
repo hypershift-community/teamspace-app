@@ -1,0 +1,393 @@
+#root {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  background-color: #2c3e50;
+  color: white;
+  position: relative;
+  overflow: visible;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #2c3e50;
+  color: white;
+  overflow-x: visible;
+}
+
+.app {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #2c3e50;
+  position: relative;
+}
+
+header {
+  background-color: #2c3e50;
+  color: white;
+  padding: 1rem;
+  padding-top: 5rem;
+  text-align: center;
+  border-bottom: 1px solid #3a506b;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 6rem;
+  width: 100%;
+  overflow: visible;
+}
+
+header h1 {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+}
+
+.header-description {
+  font-size: 0.9rem;
+  color: #bdc3c7;
+  max-width: 800px;
+  margin: 0.5rem auto 1rem auto;
+  line-height: 1.4;
+  padding: 0 1rem;
+}
+
+.header-link {
+  color: #3498db;
+  text-decoration: underline;
+}
+
+.header-link:hover {
+  color: #2980b9;
+}
+
+.auth-container {
+  position: fixed;
+  right: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  z-index: 100;
+  background-color: #233140;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0 0 0 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  min-width: auto;
+  max-width: 350px;
+  box-sizing: border-box;
+  overflow: visible;
+  height: auto;
+  width: auto;
+}
+
+.auth-container a.btn {
+  min-width: 150px;
+  width: auto;
+  text-align: center;
+  display: block;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  margin: 0;
+  box-sizing: border-box;
+  border-radius: 4px;
+  white-space: nowrap;
+  position: relative;
+  right: 0;
+}
+
+.auth-container .welcome-message {
+  background-color: transparent;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  flex-shrink: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
+}
+
+.auth-container .btn-danger {
+  background-color: #e74c3c;
+  min-width: 100px;
+  text-align: center;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+}
+
+main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #2c3e50;
+  overflow: visible;
+}
+
+.btn {
+  display: inline-block;
+  background-color: #3498db;
+  color: white;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background-color: #2980b9;
+}
+
+/* Restore general danger button style for other locations */
+.btn-danger {
+  background-color: #e74c3c; 
+}
+
+.btn-danger:hover {
+  background-color: #c0392b;
+}
+
+.teamspaces {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.teamspace-card {
+  border: 1px solid #3a506b;
+  border-radius: 4px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  background-color: #34495e;
+}
+
+.status {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #2c3e50;
+  border-radius: 4px;
+  border: 1px solid #3a506b;
+}
+
+.error {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 1.5rem;
+  background-color: #2c3e50;
+  color: white;
+}
+
+.teamspaces-container {
+  margin-top: 2rem;
+}
+
+h1, h2, h3 {
+  margin-top: 0;
+  color: white;
+}
+
+h2 {
+  margin-bottom: 1rem;
+}
+
+.welcome-message {
+  background-color: transparent;
+  color: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  flex-shrink: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
+}
+
+.login-container {
+  background-color: #34495e;
+  padding: 2rem;
+  border-radius: 4px;
+  border: 1px solid #3a506b;
+  margin-top: 2rem;
+}
+
+.commands-section {
+  margin-top: 1rem;
+  border-top: 1px solid #3a506b;
+  padding-top: 1rem;
+}
+
+.commands-section h4 {
+  margin-bottom: 0.8rem;
+  color: #3498db;
+}
+
+.command-item {
+  margin-bottom: 1rem;
+}
+
+.command-item p {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.command-box {
+  background-color: #1a2634;
+  border: 1px solid #3a506b;
+  border-radius: 4px;
+  padding: 0.8rem;
+  margin-bottom: 0.8rem;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.command-box code {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: #e74c3c;
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 80%;
+}
+
+.copy-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.copy-btn:hover {
+  background-color: #2980b9;
+}
+
+.teamspace-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+a.btn {
+  min-width: 120px;
+}
+
+/* Deletion indicator styles */
+.deleting-indicator {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 10px;
+  font-size: 0.9rem;
+  font-weight: normal;
+  color: #e74c3c;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border: 2px solid rgba(231, 76, 60, 0.3);
+  border-radius: 50%;
+  border-top-color: #e74c3c;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Make the h3 title have more space for the deletion indicator */
+.teamspace-card h3 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 1rem;
+}

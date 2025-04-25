@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teamspace-app
+  namespace: teamspaces
+  labels:
+    app: teamspace-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: teamspace-app
+  template:
+    metadata:
+      labels:
+        app: teamspace-app
+    spec:
+      serviceAccountName: teamspace-app
+      containers:
+      - name: teamspace-app
+        image: quay.io/agarcial/teamspace-app:latest
+        args: ["--config", "/app/config/config.json"]
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+          readOnly: true
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+      volumes:
+      - name: config-volume
+        secret:
+          secretName: teamspace-app-config
