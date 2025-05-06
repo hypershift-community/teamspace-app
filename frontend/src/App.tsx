@@ -1,6 +1,8 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import api from './api';
 import './App.css';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import { Button } from '@mui/material';
 
 interface Teamspace {
   name: string;
@@ -16,6 +18,9 @@ function App() {
   const [teamspaces, setTeamspaces] = useState<Teamspace[]>([]);
   const [fetchingError, setFetchingError] = useState<string | null>(null);
   const [copiedCommand, setCopiedCommand] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
+  const [newTeamspaceName, setNewTeamspaceName] = useState('');
+  const [newInitialHostedClusterRelease, setNewInitialHostedClusterRelease] = useState('quay.io/openshift-release-dev/ocp-release:4.19.0-ec.5-multi');
 
   // Check if any teamspace is in deleting state for polling
   const hasDeleteInProgress = useMemo(() => {
@@ -92,27 +97,23 @@ function App() {
     checkAuth();
   }, [fetchTeamspaces]);
 
-  const handleCreateTeamspace = async () => {
-    if (!isAuthenticated) {
-      alert('Please login first');
-      return;
-    }
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-    const name = prompt('Enter a name for the new teamspace:');
-    if (!name) {
-      console.log('Teamspace creation cancelled - no name provided');
+  const handleCreate = async () => {
+    if (!newTeamspaceName || !newInitialHostedClusterRelease) {
+      alert('Please fill in all fields');
       return;
     }
 
     try {
-      console.log('Creating teamspace:', name);
-      const createResponse = await api.post('/api/teamspaces', { name });
+      console.log('Creating teamspace:', newTeamspaceName);
+      const createResponse = await api.post('/api/teamspaces', { name: newTeamspaceName, initialHostedClusterRelease: newInitialHostedClusterRelease });
       console.log('Create response:', createResponse.data);
-      
       const response = await api.get('/api/teamspaces');
       setTeamspaces(response.data || []);
-      
-      alert(`Teamspace "${name}" created successfully!`);
+      alert(`Teamspace "${newTeamspaceName}" created successfully!`);
+      handleClose();
     } catch (err) {
       console.error('Failed to create teamspace:', err);
       alert('Failed to create teamspace: ' + (err instanceof Error ? err.message : 'Unknown error'));
@@ -254,9 +255,40 @@ function App() {
         {isAuthenticated ? (
           <div className="teamspaces-container">
             <h2>Your Teamspaces</h2>
-            <button onClick={handleCreateTeamspace} className="btn">
+            <button onClick={handleOpen} className="btn">
               Create New Teamspace
             </button>
+
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle>Create New Teamspace</DialogTitle>
+              <DialogContent>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  label="Teamspace Name"
+                  type="text"
+                  fullWidth
+                  value={newTeamspaceName}
+                  onChange={(e) => setNewTeamspaceName(e.target.value)}
+                />
+                <TextField
+                  margin="dense"
+                  label="Initial HostedCluster Release"
+                  type="text"
+                  fullWidth
+                  value={newInitialHostedClusterRelease}
+                  onChange={(e) => setNewInitialHostedClusterRelease(e.target.value)}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                  Cancel
+                </Button>
+                <Button onClick={handleCreate} color="primary">
+                  Create
+                </Button>
+              </DialogActions>
+            </Dialog>
 
             <div className="teamspaces">
               {teamspaces.length === 0 ? (
