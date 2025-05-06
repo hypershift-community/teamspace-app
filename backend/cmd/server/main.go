@@ -344,7 +344,8 @@ func handleCreateTeamspace(w http.ResponseWriter, r *http.Request) {
 	r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
 	var data struct {
-		Name string `json:"name"`
+		Name                        string `json:"name"`
+		InitialHostedClusterRelease string `json:"initialHostedClusterRelease"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
 		log.Printf("=== CREATE TEAMSPACE: Error decoding request body: %v", err)
@@ -352,7 +353,7 @@ func handleCreateTeamspace(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("=== CREATE TEAMSPACE: With name: %s for user: %s", data.Name, username)
+	log.Printf("=== CREATE TEAMSPACE: With name: %s and release: %s for user: %s", data.Name, data.InitialHostedClusterRelease, username)
 
 	if data.Name == "" {
 		log.Printf("=== CREATE TEAMSPACE: Empty name provided")
@@ -360,7 +361,7 @@ func handleCreateTeamspace(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	teamspace, err := k8sManager.CreateTeamspace(data.Name, username)
+	teamspace, err := k8sManager.CreateTeamspace(data.Name, username, data.InitialHostedClusterRelease)
 	if err != nil {
 		log.Printf("=== CREATE TEAMSPACE: Error creating teamspace: %v", err)
 		http.Error(w, "Failed to create teamspace: "+err.Error(), http.StatusInternalServerError)

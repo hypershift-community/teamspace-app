@@ -14,6 +14,7 @@ function CreateTeamspace() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    initialHostedClusterRelease: 'quay.io/openshift-release-dev/ocp-release:4.19.0-ec.5-multi',
   });
   const [error, setError] = useState('');
 
@@ -65,6 +66,15 @@ function CreateTeamspace() {
             margin="normal"
             multiline
             rows={4}
+          />
+
+          <TextField
+            fullWidth
+            label="Initial HostedCluster Release"
+            name="initialHostedClusterRelease"
+            value={formData.initialHostedClusterRelease}
+            onChange={handleChange}
+            margin="normal"
           />
 
           {error && (
