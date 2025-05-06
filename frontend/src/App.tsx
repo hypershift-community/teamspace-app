@@ -210,6 +210,32 @@ function App() {
     );
   };
 
+  const downloadKubeconfig = async (teamspaceName: string) => {
+    try {
+      const response = await fetch(`/api/teamspaces/${teamspaceName}/kubeconfig`, {
+        method: 'GET',
+        credentials: 'include', // Include cookies for authentication
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `kubeconfig-${teamspaceName}.yaml`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Failed to download kubeconfig:', error);
+      alert('Failed to download kubeconfig');
+    }
+  };
+
   if (isAuthenticated === null) {
     return <div className="loading">Loading...</div>;
   }
@@ -313,10 +339,10 @@ function App() {
                       <div className="command-item">
                         <p>Export the teamspace kubeconfig:</p>
                         <div className="command-box">
-                          <code>export KUBECONFIG=~/Downloads/kubeconfig.yaml</code>
+                          <code>export KUBECONFIG=~/Downloads/kubeconfig-{teamspace.name}.yaml</code>
                           <button 
                             className="copy-btn"
-                            onClick={() => copyToClipboard(`export KUBECONFIG=~/Downloads/kubeconfig.yaml`, `export-${teamspace.name}`)}
+                            onClick={() => copyToClipboard(`export KUBECONFIG=~/Downloads/kubeconfig-${teamspace.name}.yaml`, `export-${teamspace.name}`)}
                           >
                             {copiedCommand === `export-${teamspace.name}` ? 'Copied!' : 'Copy'}
                           </button>
@@ -361,20 +387,33 @@ function App() {
                           </button>
                         </div>
                       </div>
+
+                      <div className="command-item">
+                        <p>Get the HostedCluster kubeconfig:</p>
+                        <div className="command-box">
+                          <code>kubectl get secret -n {teamspace.namespace} dev-admin-kubeconfig -o jsonpath='{'{.data.kubeconfig}'}' | base64 -d &gt; kubeconfig-{teamspace.name}-hostedcluster</code>
+                          <button 
+                            className="copy-btn"
+                            onClick={() => copyToClipboard(`kubectl get secret -n ${teamspace.namespace} dev-admin-kubeconfig -o jsonpath='{.data.kubeconfig}' | base64 -d > kubeconfig-${teamspace.name}-hostedcluster`, `hostedcluster-${teamspace.name}`)}
+                          >
+                            {copiedCommand === `hostedcluster-${teamspace.name}` ? 'Copied!' : 'Copy'}
+                          </button>
+                        </div>
+                      </div>
                     </div>
                       
                     <div className="teamspace-actions">
-                      <a
-                        href={`/api/teamspaces/${teamspace.name}/kubeconfig`}
+                      <button
+                        onClick={() => downloadKubeconfig(teamspace.name)}
                         className="btn"
-                        download
                         style={{ 
                           opacity: (teamspace.isDeleting || teamspace.deletionTimestamp) ? 0.5 : 1,
                           pointerEvents: (teamspace.isDeleting || teamspace.deletionTimestamp) ? 'none' : 'auto'
                         }}
+                        disabled={teamspace.isDeleting || !!teamspace.deletionTimestamp}
                       >
                         Download Kubeconfig
-                      </a>
+                      </button>
                       <button
                         onClick={() => handleDeleteTeamspace(teamspace.name)}
                         className="btn btn-danger"
