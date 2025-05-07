@@ -51,7 +51,7 @@ func NewTeamspaceManager() (*TeamspaceManager, error) {
 	}, nil
 }
 
-func (m *TeamspaceManager) CreateTeamspace(name string, owner string, initialHostedClusterRelease string) (*Teamspace, error) {
+func (m *TeamspaceManager) CreateTeamspace(name string, owner string, initialHostedClusterRelease string, featureSet string) (*Teamspace, error) {
 	namespace := fmt.Sprintf("teamspace-%s", name)
 	teamspace := &Teamspace{
 		Name:      name,
@@ -70,7 +70,8 @@ func (m *TeamspaceManager) CreateTeamspace(name string, owner string, initialHos
 				"name":      name,
 			},
 			Annotations: map[string]string{
-				"release": initialHostedClusterRelease,
+				"release":     initialHostedClusterRelease,
+				"feature-set": featureSet,
 			},
 		},
 	}, metav1.CreateOptions{})

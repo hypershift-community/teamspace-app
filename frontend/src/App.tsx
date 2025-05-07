@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import api from './api';
 import './App.css';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, MenuItem } from '@mui/material';
 import { Button } from '@mui/material';
 
 interface Teamspace {
@@ -21,6 +21,7 @@ function App() {
   const [open, setOpen] = useState(false);
   const [newTeamspaceName, setNewTeamspaceName] = useState('');
   const [newInitialHostedClusterRelease, setNewInitialHostedClusterRelease] = useState('quay.io/openshift-release-dev/ocp-release:4.19.0-ec.5-multi');
+  const [featureSet, setFeatureSet] = useState('Default');
 
   // Check if any teamspace is in deleting state for polling
   const hasDeleteInProgress = useMemo(() => {
@@ -101,6 +102,8 @@ function App() {
   const handleClose = () => setOpen(false);
 
   const handleCreate = async () => {
+    const featureSetValue = featureSet === 'Default' ? '' : featureSet;
+
     if (!newTeamspaceName || !newInitialHostedClusterRelease) {
       alert('Please fill in all fields');
       return;
@@ -108,7 +111,11 @@ function App() {
 
     try {
       console.log('Creating teamspace:', newTeamspaceName);
-      const createResponse = await api.post('/api/teamspaces', { name: newTeamspaceName, initialHostedClusterRelease: newInitialHostedClusterRelease });
+      const createResponse = await api.post('/api/teamspaces', {
+        name: newTeamspaceName,
+        initialHostedClusterRelease: newInitialHostedClusterRelease,
+        featureSet: featureSetValue
+      });
       console.log('Create response:', createResponse.data);
       const response = await api.get('/api/teamspaces');
       setTeamspaces(response.data || []);
@@ -305,6 +312,18 @@ function App() {
                   value={newInitialHostedClusterRelease}
                   onChange={(e) => setNewInitialHostedClusterRelease(e.target.value)}
                 />
+                <TextField
+                  select
+                  label="FeatureSet"
+                  value={featureSet || 'Default'}
+                  onChange={(e) => setFeatureSet(e.target.value)}
+                  fullWidth
+                  margin="dense"
+                >
+                  <MenuItem value="Default">Default</MenuItem>
+                  <MenuItem value="TechPreviewNoUpgrade">TechPreviewNoUpgrade</MenuItem>
+                  <MenuItem value="DevPreviewNoUpgrade">DevPreviewNoUpgrade</MenuItem>
+                </TextField>
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose} color="primary">
